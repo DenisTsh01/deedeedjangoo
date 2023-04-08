@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}Chat{% endblock %}
+{% block content %}
+
+    <div class="box" style="border: 15px">
+        <div class="container fluid">
+            <div name="chatbox" style="height: 200px" class="col-6">
+
+            </div>
+            <br>
+            <span class="col-6">
+                <input type="text" name="user_input" id="new_message" style="width: 40%">
+                 <button type="submit" onclick="sendTextToServer()" class="button is-success">Send</button>
+                </span>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        class Listener {
+
+            constructor(startButtonId, textAreaId) {
+                this.recognition = new webkitSpeechRecognition();
+                this.recognizing = false;
+                this.button = document.getElementById(startButtonId);
+                this.button.innerHTML = "Click to Speak";
+                this.recognition.onend = this.reset();
+                let textarea = document.getElementById(textAreaId);
+                this.recognition.onresult = function (event) {
+                    console.log("Voice recognition started. Try speaking into the microphone.");
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            textarea.value = event.results[i][0].transcript;
+                        }
+                    }
+                };
+            }
+
+            reset() {
+                this.recognizing = false;
+                this.button.innerHTML = "Click to Speak";
+            }
+
+            toggleStartStop() {
+                if (this.recognizing) {
+                    this.recognition.stop();
+                    this.reset();
+                } else {
+                    this.recognition.start();
+                    this.recognizing = true;
+                    this.button.innerHTML = "Click to Stop";
+                }
+            }
+
+        }
+
+
+        class Speaker {
+            constructor() {
+
+            }
+
+            speak(message) {
+                if ('speechSynthesis' in window) {
+                    let msg = new SpeechSynthesisUtterance();
+                    msg.text = message;
+                    window.speechSynthesis.speak(msg);
+                } else {
+                    alert("Sorry, your browser doesn't support text to speech!");
+                }
+            }
+        }
+
+
+        listener = null;
+        speaker = null;
+
+        function listen() {
+            if (listener == null)
+                listener = new Listener('startStop', 'textarea');
+            listener.toggleStartStop();
+        }
+
+        function speak(text) {
+            if (speaker == null)
+                speaker = new Speaker();
+            speaker.speak(text);
+        }
+
+        function sendTextToServer() {
+            let xhttp = new XMLHttpRequest();
+            const text = document.getElementById('new_message').value;
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState === 4 && xhttp.status === 200) {
+                    console.log(xhttp.responseText);
+                }
+            }
+            xhttp.open("POST", "http://127.0.0.1:8000/chat/", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("message=" + text);
+            const response = xhttp.response;
+            console.log(response);
+            document.getElementById('new_message').value = '';
+        }
+    </script>
+{% endblock %}

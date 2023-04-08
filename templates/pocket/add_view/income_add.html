@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}DeeDee{% endblock %}
+{% block content %}
+    <div class="box" aria-setsize="6px">
+        <form method="post" >
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="field">
+                    {% if field.label == 'Income type' %}
+                        <label class="label">{{ field.label }}</label>
+                        <div class="control">
+                            <select name="income_type" class="form-control">
+
+                                {% for income_type in income_types %}
+                                    <option value="{{ income_type.id }}">{{ income_type.name }}</option>
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+                    {% elif  field.label == 'Extend user' %}
+
+                        <input type="hidden" name="extend_user" value="{{ extend_user.id }}">
+
+                    {% else %}
+
+                        <label class="label">{{ field.label }}</label>
+                        <div class="control">
+                            {{ field }} {# aduce inputul pt fiecare field #}
+                        </div>
+                        <span class="color_red">{{ field.errors }}</span> {# afiseaza erorile #}
+                    {% endif %}
+
+
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="button is-success">Send</button>
+            <a href="{% url 'wallet_main_page' %}">* Back to pocket main page *</a>
+            <a href="{% url 'home_page' %}">Back to home *</a>
+        </form>
+
+    </div>
+{% endblock %}

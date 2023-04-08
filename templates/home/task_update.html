@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}{% endblock %}
+
+{% block content %}
+    <div class="box" aria-setsize="6px">
+    <form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+        <input class="btn btn-sm btn-success" type="submit" value="Update" name="Update">
+
+       <a class="btn  btn-light" href="{% url 'home_page' %}">Back</a>
+    </form>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% block title %}DeeDee{% endblock %}
+{% block content %}
+    {% block head %}
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
+                integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
+                crossorigin="anonymous"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
+                integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
+                crossorigin="anonymous"></script>
+    {% endblock %}
+    <div class="box col-sm-3 m-2 card deedee-card ">
+
+
+        {% if user.is_authenticated %}
+            <h2>Hi {{ user.first_name }}</h2>
+            <br>
+            <div class="box col-sm-3 m-2 card deedee-card" style="background-color:ghostwhite"><strong>Your daily
+                weather information</strong>
+                <br>
+                <p>{{ city }}</p>
+                <a>Sky</a>
+                {% if sky == "cloudy" %}
+                    {{ sky }}
+                    <i class="fas fa-cloud"></i>
+                    {% else %}
+                {% if sky == "sky thunderstruck" %}
+                    {{ sky }}
+                    <i class="fa fa-bolt" aria-hidden="true"></i>
+
+                {% else %}
+                    {{ sky }}
+                    <i class="fas fa-sun"></i>
+                {% endif %}
+                    {% endif %}
+
+                <br>
+                <a>Temperature</a>
+                {{ weather_degrees_celsius }}<strong>C </strong>
+                <br>
+                <a>Feels like</a>
+                {{ weather_degrees_feels_like }} <strong>C</strong>
+                <div style="align-content: end">
+                    <a>Max Temp</a>
+                    {{ weather_degrees_max }} <strong>C</strong>
+                    <a>Min Temp</a>
+                    {{ weather_degrees_min }} <strong>C</strong>
+                    <br>
+                    <a>Humidity</a>
+                    {{ weather_humidity }}%
+                </div>
+            </div>
+            <div class="box col-sm-3 m-2 card deedee-card" style="background-color: ghostwhite">
+                <div class="myDIV"><strong>Your tasks</strong></div>
+                <br>
+
+                <div class="row">
+
+                    {% for task in tasks %}
+                        {% if task.days_until_deadline <= 0 and task.completed != "Done" and task.completed != "Remove" %}
+                            <div class="box col-sm-3 m-2 card deedee-card" style="background-color:darkred; ">
+
+                                <p><strong style="color:white">Task name</strong></p>
+                                <p style="color:white">{{ task.task_name }}</p>
+                                {% if task.task_information != "" %}
+                                    <p><strong style="color:white">Task information</strong></p>
+                                    <p style="color:white">{{ task.task_information }}</p>
+                                {% endif %}
+                                <p><strong style="color:white">Deadline</strong> <em
+                                        style="color:red">({{ task.days_until_deadline }} days left)</em></p>
+                                <p style="color:white">{{ task.task_deadline }}</p>
+                                <div style="text-align:right">
+                                    <a class="btn btn-sm btn-light" href="{% url 'task_update' task.id %} ">Update
+                                        task</a>
+                                </div>
+                            </div>
+                        {% elif task.days_until_deadline <= 2 and task.completed != "Done" and task.completed != "Remove" %}
+                            <div class="box col-sm-3 m-2 card deedee-card" style="background-color:red; ">
+
+                                <p><strong style="color:white">Task name</strong></p>
+                                <p style="color:white">{{ task.task_name }}</p>
+                                {% if task.task_information != "" %}
+                                    <p><strong style="color:white">Task information</strong></p>
+                                    <p style="color:white">{{ task.task_information }}</p>
+                                {% endif %}
+                                <p><strong style="color:white">Deadline</strong> <em
+                                        style="color:floralwhite">({{ task.days_until_deadline }} days left)</em></p>
+                                <p style="color:white">{{ task.task_deadline }}</p>
+                                <div style="text-align:right">
+                                    <a class="btn btn-sm btn-light" href="{% url 'task_update' task.id %} ">Update
+                                        task</a>
+                                </div>
+                            </div>
+                        {% elif task.days_until_deadline <= 5 and task.completed != "Done" and task.completed != "Remove" %}
+                            <div class="box col-sm-3 m-2 card deedee-card" style="background-color:#ffaa17">
+
+                                <p><strong>Task name</strong></p>
+                                <p style="color:white">{{ task.task_name }}</p>
+                                {% if task.task_information != "" %}
+                                    <p><strong>Task information</strong></p>
+                                    <p style="color:white">{{ task.task_information }}</p>
+                                {% endif %}
+                                <p><strong>Deadline </strong> <em style="color:black">({{ task.days_until_deadline }}
+                                    days left)</em></p>
+                                <p style="color:white">{{ task.task_deadline }}</p>
+                                <div style="text-align:right">
+                                    <a class="btn btn-sm btn-light" href="{% url 'task_update' task.id %} ">Update
+                                        task</a>
+                                </div>
+                            </div>
+                        {% elif task.days_until_deadline <= 9 and task.completed != "Done" and task.completed != "Remove" %}
+                            <div class="box col-sm-3 m-2 card deedee-card" style="background-color:palegreen">
+
+                                <p><strong>Task name</strong></p>
+                                <p style="color:black">{{ task.task_name }}</p>
+                                {% if task.task_information != "" %}
+                                    <p><strong>Task information</strong></p>
+                                    <p style="color:black">{{ task.task_information }}</p>
+                                {% endif %}
+                                <p><strong>Deadline </strong> <em style="color:black">({{ task.days_until_deadline }}
+                                    days left)</em></p>
+                                <p style="color:black">{{ task.task_deadline }}</p>
+                                <div style="text-align:right">
+                                    <a class="btn btn-sm btn-light" href="{% url 'task_update' task.id %} ">Update
+                                        task</a>
+                                </div>
+                            </div>
+                        {% elif task.completed != "Done" and task.completed != "Remove" %}
+                            <div class="box col-sm-3 m-2 card deedee-card" style="background-color:#8ce6ff">
+
+                                <p><strong>Task name</strong></p>
+                                <p style="color:black">{{ task.task_name }}</p>
+                                {% if task.task_information != "" %}
+                                    <p><strong>Task information</strong></p>
+                                    <p style="color:black">{{ task.task_information }}</p>
+                                {% endif %}
+                                <p><strong>Deadline </strong> <em style="color:black">({{ task.days_until_deadline }}
+                                    days left)</em></p>
+                                <p style="color:black">{{ task.task_deadline }}</p>
+                                <div style="text-align:right">
+                                    <a class="btn btn-sm btn-light" href="{% url 'task_update' task.id %} ">Update
+                                        task</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                </div>
+
+                <div><a style="color: cornflowerblue" href="{% url 'task' %}">Add Task</a></div>
+                <br>
+            </div>
+            <div class="myDIV"><strong>Your status</strong></div>
+            <br><h1>Soon</h1>
+            <div>
+                <em>Daily status</em>
+            </div>
+            <br>
+            <div><em>Weekly average</em></div>
+            <br>
+            <div>
+                <em>Monthly average</em>
+            </div>
+
+        {% else %}
+            <h2 class="alert-heading">Welcome to DeeDee</h2>
+            <p>Please log in</p>
+        {% endif %}
+
+        <hr>
+        <p></p>
+    </div>
+
+{% endblock %}
